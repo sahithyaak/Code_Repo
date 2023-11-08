@@ -1,0 +1,38 @@
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+
+# Sample text data - you should replace this with your own dataset
+documents = [
+    "This is a positive document.",
+    "This is a negative document.",
+    "Another positive example.",
+    "Yet another negative example.",
+]
+
+# Corresponding labels (0 for negative, 1 for positive)
+labels = [1, 0, 1, 0]
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(documents, labels, test_size=0.2, random_state=42)
+
+# Create a CountVectorizer to convert text data into a numerical feature matrix
+vectorizer = CountVectorizer()
+X_train = vectorizer.fit_transform(X_train)
+X_test = vectorizer.transform(X_test)
+
+# Create and train a Multinomial Naive Bayes classifier
+clf = MultinomialNB()
+clf.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = clf.predict(X_test)
+
+# Calculate accuracy and other evaluation metrics
+accuracy = accuracy_score(y_test, y_pred)
+classification_report_str = classification_report(y_test, y_pred)
+
+# Print the results
+print("Accuracy:", accuracy)
+print("Classification Report:\n", classification_report_str)
