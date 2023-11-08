@@ -1,0 +1,42 @@
+import pandas as pd
+from sklearn.feature_selection import SelectKBest, chi2
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
+# Load your dataset
+# Replace 'your_dataset.csv' with the filename or URL of your dataset
+data = pd.read_csv('your_dataset.csv')
+
+# Separate the target variable (y) and features (X)
+X = data.drop('target_column', axis=1)  # Replace 'target_column' with your target column name
+y = data['target_column']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Feature Extraction: Text Data (TF-IDF Vectorization)
+tfidf_vectorizer = TfidfVectorizer()
+X_train_tfidf = tfidf_vectorizer.fit_transform(X_train['text_column'])  # Replace 'text_column' with your text column name
+X_test_tfidf = tfidf_vectorizer.transform(X_test['text_column'])
+
+# Feature Selection: SelectKBest with chi-squared test
+k_best_selector = SelectKBest(chi2, k=100)  # Select the top 100 features
+X_train_selected = k_best_selector.fit_transform(X_train_tfidf, y_train)
+X_test_selected = k_best_selector.transform(X_test_tfidf)
+
+# Train a classifier (Random Forest in this example)
+classifier = RandomForestClassifier()
+classifier.fit(X_train_selected, y_train)
+
+# Make predictions on the test data
+y_pred = classifier.predict(X_test_selected)
+
+# Calculate accuracy and other evaluation metrics
+accuracy = accuracy_score(y_test, y_pred)
+classification_report_str = classification_report(y_test, y_pred)
+
+# Print the results
+print("Accuracy:", accuracy)
+print("Classification Report:\n", classification_report_str)
