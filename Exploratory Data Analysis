@@ -1,0 +1,52 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load your dataset
+# Replace 'your_dataset.csv' with the filename or URL of your dataset
+data = pd.read_csv('your_dataset.csv')
+
+# Display the first few rows of the dataset to get an initial overview
+print("First few rows of the dataset:")
+print(data.head())
+
+# Display summary statistics for numerical features
+print("Summary statistics:")
+print(data.describe())
+
+# Check data types and missing values
+print("Data types and missing values:")
+print(data.info())
+
+# Visualize data distribution with histograms
+data.hist(bins=20, figsize=(12, 8))
+plt.show()
+
+# Identify outliers with box plots
+sns.boxplot(data=data)
+plt.show()
+
+# Explore feature correlations with a correlation matrix and heatmap
+correlation_matrix = data.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+plt.show()
+
+# Create a pairplot to visualize relationships between numerical variables
+sns.pairplot(data)
+plt.show()
+
+# Analyze categorical variables with count plots
+sns.countplot(x='categorical_column', data=data)
+plt.show()
+
+# Visualize relationships between two continuous variables with a scatter plot
+sns.scatterplot(x='x_variable', y='y_variable', data=data)
+plt.show()
+
+# Add your custom EDA: insert additional exploratory visualizations and analysis here
+
+# Optionally, save the EDA plots to files or display them in a Jupyter Notebook
+# plt.savefig('eda_plots.png')
+
+# Close any open plots to prevent clutter
+plt.close()
