@@ -1,0 +1,38 @@
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
+from sklearn.model_selection import train_test_split
+
+# Load your dataset
+# Replace 'your_dataset.csv' with the filename or URL of your dataset
+data = pd.read_csv('your_dataset.csv')
+
+# Handle missing values
+data.dropna(inplace=True)  # Drop rows with missing values
+
+# Split the data into features (X) and target labels (y)
+X = data.drop('target_column', axis=1)  # Replace 'target_column' with the name of your target column
+y = data['target_column']
+
+# Encode categorical variables (if needed)
+# Example using LabelEncoder and OneHotEncoder
+label_encoder = LabelEncoder()
+X['categorical_column'] = label_encoder.fit_transform(X['categorical_column'])
+
+# Perform one-hot encoding for categorical variables with multiple categories
+# Example: X = pd.get_dummies(X, columns=['categorical_column'])
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Standardize or normalize numerical features (if needed)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Additional data preprocessing steps can be added here
+
+# Display the preprocessed data
+print("X_train:", X_train)
+print("X_test:", X_test)
+print("y_train:", y_train)
+print("y_test:", y_test)
